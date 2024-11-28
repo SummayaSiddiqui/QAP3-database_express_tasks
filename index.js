@@ -37,8 +37,9 @@ let tasks = [
 ];
 
 // GET /tasks - Get all tasks
-app.get("/tasks", (req, res) => {
-  res.json(tasks);
+app.get("/tasks", async (req, res) => {
+  const result = await pool.query("SELECT * FROM tasks");
+  res.json(result.rows);
 });
 
 // POST /tasks - Add a new task
