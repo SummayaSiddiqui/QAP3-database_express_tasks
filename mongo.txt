@@ -20,3 +20,15 @@ author: "George Orwell",
 genre: "Dystopian",
 publishedYear: 1949
 });
+
+** Query to retrieve the titles of all books **
+db.books.find({}, {title: 1, _id: 0});
+
+** Query to find books written by "J.R.R. Tolkien" **
+db.books.find({ author: "J.R.R. Tolkien" });
+
+** Query to update he genre of “1984” to "Science Fiction" **
+db.books.updateOne({title: "1984"}, {$set: { genre: "Science fiction"}});
+
+** Query to delete the book "The Hobbit" **
+db.books.deleteOne({title: "The Hobbit"});
