@@ -1,6 +1,9 @@
+** To create the collection **
+use keyin_test;
+db.createCollection("books");
+
 ** To insert the sample book data provided above into the books collection **
 db.books.insertOne({
-
 title: "The Hobbit"
 author: "J.R.R. Tolkien"
 genre: "Fantasy"
