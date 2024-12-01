@@ -37,9 +37,9 @@ let tasks = [
 ];
 
 // GET /tasks - Get all tasks
-app.get("/tasks", async (req, res) => {
+app.get("/tasks", async (request, response) => {
   const result = await pool.query("SELECT * FROM tasks");
-  res.json(result.rows);
+  response.json(result.rows);
 });
 
 // POST /tasks - Add a new task
@@ -60,22 +60,35 @@ app.post("/tasks", async (request, response) => {
       .status(201)
       .json({ message: "Task added successfully", task: result.rows[0] });
   } catch (error) {
-    console.error("Error adding task:", err);
-    res.status(500).json({ error: "Failed to add task" });
+    console.error("Error adding task:", error);
+    response.status(500).json({ error: "Failed to add task" });
   }
 });
 
 // PUT /tasks/:id - Update a task's status
-app.put("/tasks/:id", (request, response) => {
+app.put("/tasks/:id", async (request, response) => {
   const taskId = parseInt(request.params.id, 10);
   const { status } = request.body;
-  const task = tasks.find((t) => t.id === taskId);
 
-  if (!task) {
-    return response.status(404).json({ error: "Task not found" });
+  if (!status) {
+    return response.status(400).json({ error: "Status is required" });
   }
-  task.status = status;
-  response.json({ message: "Task updated successfully" });
+
+  try {
+    const result = await pool.query(
+      "UPDATE tasks SET status = $1 WHERE id = $2 RETURNING *",
+      [status, taskId]
+    );
+
+    if (result.rows.length === 0) {
+      return response.status(404).json({ error: "Task not found" });
+    }
+
+    response.json(result.rows[0]);
+  } catch (error) {
+    console.error("Error updating task:", error);
+    response.status(500).json({ error: "Failed to update task" });
+  }
 });
 
 // DELETE /tasks/:id - Delete a task
