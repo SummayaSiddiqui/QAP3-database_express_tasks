@@ -1,0 +1,22 @@
+** To insert the sample book data provided above into the books collection **
+db.books.insertOne({
+
+title: "The Hobbit"
+author: "J.R.R. Tolkien"
+genre: "Fantasy"
+publishedYear: 1937
+});
+
+db.books.insertOne({
+title: "To Kill a Mockingbird"
+author: "Harper Lee"
+genre: "Fiction"
+publishedYear: 1960
+});
+
+db.books.insertOne({
+title: "1984",
+author: "George Orwell",
+genre: "Dystopian",
+publishedYear: 1949
+});
